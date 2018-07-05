@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('user_id');    // User making a transaction
             $table->integer('qrcode_owner_id')->nullable();
             $table->integer('qrcode_id');
+            $table->string('payment_method')->nullable();
             $table->longText('message')->nullable(); 
             $table->float('amount', 10, 4);
             $table->string('status')->default('Initiated');       // Initiated, Payment Failed, Completed and Successful 
