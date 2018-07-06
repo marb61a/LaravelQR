@@ -59,6 +59,18 @@ class QrcodeController extends AppBaseController
 
         $qrcode = $this->qrcodeRepository->create($input);
 
+        // Generate QRCode
+        // Save QRCode image in the folder on this site
+        $file = 'qrcodes/'.$qrcode->id.'png';
+
+        $success2 = json_encode($success);
+
+        QRCode::text($success2)
+        ->setSize(4)
+        ->setMargin(2)
+        ->setOutFile($file)
+        ->png();
+
         Flash::success('Qrcode saved successfully.');
 
         return redirect(route('qrcodes.index'));
