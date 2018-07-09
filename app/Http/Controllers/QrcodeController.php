@@ -106,17 +106,30 @@ class QrcodeController extends AppBaseController
      *
      * @return Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $qrcode = $this->qrcodeRepository->findWithoutFail($id);
 
         if (empty($qrcode)) {
+            if($request->expectsJson()){
+                 throw new \ErrorException();
+            }
+            
             Flash::error('Qrcode not found');
-
             return redirect(route('qrcodes.index'));
         }
 
-        return view('qrcodes.show')->with('qrcode', $qrcode);
+        $transactions = $qrcode->transactions;
+
+        if ($request->expectsJson()) {
+            return response([
+                'data' => new QrcodeResource($qrcode)
+            ], Response::HTTP_OK); 
+        }  
+        
+        return view('qrcodes.show')
+        ->with('transactions', $transactions)
+        ->with('qrcode', $qrcode);
     }
 
     /**
